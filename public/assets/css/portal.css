@@ -429,6 +429,7 @@ th {
 }
 label {
     display: inline-block;
+    color: #D45F45;
 }
 button {
     border-radius: 0;
@@ -11475,7 +11476,7 @@ h5,
 .h5,
 h6,
 .h6 {
-    color: #252930;
+    color: #e01a2c;
     font-weight: 600;
 }
 a {
@@ -11571,15 +11572,15 @@ button.close:focus {
     box-shadow: none !important;
 }
 .app-btn-primary {
-    background: #15a362;
+    background: #F07024;
     color: #fff;
-    border-color: #15a362;
+    border-color: #9C1981;
 }
 .app-btn-primary:hover,
 .app-btn-primary:active {
     color: #fff;
-    background: #18ba70;
-    border-color: #18ba70;
+    background: #e01a2c;
+    border-color: #9C1981;
 }
 .app-btn-secondary {
     background: #fff;
@@ -12082,6 +12083,7 @@ button.close:focus {
 }
 .app-footer .copyright {
     font-size: 0.8125rem;
+    color: #FFC185;
 }
 .app-wrapper {
     transition: all 0.4s ease-in-out;
@@ -12496,7 +12498,7 @@ button.close:focus {
 }
 @media (min-width: 1200px) {
     .table-search-form .form-control {
-        min-width: 300px;
+        min-width: 400px;
     }
 }
 @media (max-width: 575.98px) {
@@ -12508,7 +12510,7 @@ button.close:focus {
     }
 }
 .app-login .auth-background-holder {
-    background: url("../images/background/background-1.jpg") no-repeat center
+    background: url("../images/warehouse-img-1.jpg") no-repeat center
         center;
     background-size: cover;
     height: 100vh;
@@ -12602,10 +12604,10 @@ button.close:focus {
 }
 .app-auth-wrapper .extra a {
     text-decoration: underline;
-    color: #828d9f;
+    color: #F68A20;
 }
 .app-auth-wrapper .extra a:hover {
-    color: #5d6778;
+    color: #E21E2E;
 }
 .app-auth-wrapper .auth-heading-desc {
     font-weight: 500;
@@ -12619,6 +12621,7 @@ button.close:focus {
 }
 .app-auth-footer .copyright {
     font-size: 0.75rem;
+    color:#FFC185;
 }
 @media (max-width: 767.98px) {
     .auth-background-col {

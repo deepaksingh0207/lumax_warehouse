@@ -18,8 +18,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'sap_code',
         'name',
         'email',
+        'mobile_no',
         'password',
     ];
 
@@ -44,5 +46,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }

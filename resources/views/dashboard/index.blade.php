@@ -17,12 +17,12 @@
                     <tbody>
                         <tr>
                             <td class="cell">000015346</td>
-                            <td class="cell"><span class="truncate">John Sanders</span></td>
-                            <td class="cell">john.sanders@lumaxworld.in</td>
+                            <td class="cell"><span class="truncate">Admin User</span></td>
+                            <td class="cell">admin@lumaxworld.in</td>
                             <td class="cell">
                                 <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="mySwitch">
-                                <label class="form-check-label" for="mySwitch" id = "switch_label_">Example Switch</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="mySwitch" checked>
+                                <label class="form-check-label" for="mySwitch" id = "switch_label_">Active</label>
                                 </div>
                             </td>
                         </tr>
