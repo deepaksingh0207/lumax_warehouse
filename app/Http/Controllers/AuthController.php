@@ -27,8 +27,19 @@ class AuthController extends Controller
         // Check if "remember me" was ticked
         $remember = $request->has('remember');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials , $remember)) {
             $request->session()->regenerate();
+
+            // Get the logged-in user
+            $user = Auth::user();
+          
+            $group = $user->group ?? null;  
+
+            session([
+                'user' => $user,
+                'group' => $group,
+            ]);
+
             return redirect()->intended('dashboard'); // redirect after login
         }
 

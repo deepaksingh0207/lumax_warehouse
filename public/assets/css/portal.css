@@ -11613,8 +11613,8 @@ button.close:focus {
     color: #5d6778;
 }
 .form-check-input:checked {
-    background-color: #15a362;
-    border-color: #15a362;
+    background-color: #e01a2c;
+    border-color: #e01a2c;
 }
 .dropdown-menu {
     border-color: #e7e9ed;

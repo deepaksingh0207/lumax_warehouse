@@ -1,5 +1,14 @@
 @extends('layouts.app')
 @section('content')
+<style>
+    .item-checkbox {
+        scale: 1.4;
+        cursor: pointer;
+    }
+</style>
+<div class="alert alert-danger d-none" role="alert" id = "alert_msg_div">
+  
+</div>
 <div class="row g-3 mb-4 align-items-center justify-content-between">
     <div class="col-auto">
         <h1 class="app-page-title mb-0">Item Labels</h1>
@@ -27,65 +36,55 @@
             </div><!--//row-->
         </div><!--//table-utilities-->
     </div><!--//col-auto-->
-</div>
+    <div class="col-auto">
+        <button type="button" class="btn app-btn-primary" id="print_btn">Print</button>
+    </div>
 </div>
 <div class="row">
     <div class="app-card app-card-orders-table shadow-sm mb-5">
-        <div class="app-card-body">
+        <div class="app-card-body mt-2">
             <div class="table-responsive">
-                <table class="table app-table-hover mb-0 text-left">
+                <table class="table table-bordered app-table-hover mb-0 text-left">
                     <thead>
                         <tr>
+                            <th></th>
                             <th class="cell">SAP Code</th>
                             <th class="cell">ITEM CODE</th>
                             <th class="cell">STD QTY</th>
-                            <th class="cell">PACKAGING</th>
+                            <th class="cell">PACKING</th>
                             <th class="cell">M.R.P</th>
                             <th class="cell">UOM</th>
                             <th class="cell">DESCRIPTION</th>
-                            <th class="cell">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="cell">000000000061028439</td>
-                            <td class="cell"><span class="truncate">002-TLA-SG-WH-24-L</span></td>
-                            <td class="cell">12</td>
-                            <td class="cell">1 X 1 X 12</td>
-                            <td class="cell">1150</td>
-                            <td class="cell">NOS</td>
-                            <td class="cell">T/L ASSY SIGNA LED WT WIRE 24V LH</td>
+                        @forelse ($items as $item)
+                        <tr class="row_{{ $item->id }}">
                             <td>
-                                <button type="button" class="btn app-btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Print</button>
+                                <div class="form-check">
+                                    <input class="form-check-input item-checkbox" name="item_checkbox" type="checkbox" value="{{ $item->id }}">
+                                </div>
                             </td>
+                            <td class="cell">{{ $item->sap_code }}</td>
+                            <td class="cell"><span class="truncate">{{ $item->item_code }}</span></td>
+                            <td class="cell">{{ $item->std_qty }}</td>
+                            <td class="cell">{{ $item->packing }}</td>
+                            <td class="cell">{{ $item->mrp  }}</td>
+                            <td class="cell">{{ $item->uom }}</td>
+                            <td class="cell">{{ $item->description }}</td>
                         </tr>
+                        @empty
                         <tr>
-                            <td class="cell">000000000061028440</td>
-                            <td class="cell"><span class="truncate">002-TLA-SG-WH-24-R</span></td>
-                            <td class="cell">12</td>
-                            <td class="cell">1 X 1 X 12</td>
-                            <td class="cell">1150</td>
-                            <td class="cell">NOS</td>
-                            <td class="cell">T/L ASSY SIGNA LED WT WIRE 24V RH</td>
-                            <td>
-                                <button type="button" class="btn app-btn-primary">Print</button>
-                            </td>
+                            <td colspan="8" class="text-center">No Data found</td>
                         </tr>
-                        <tr>
-                            <td class="cell">000000000061025848</td>
-                            <td class="cell"><span class="truncate">033-RCA-6P-LED-L</span></td>
-                            <td class="cell">30</td>
-                            <td class="cell">1 X 1 X 30</td>
-                            <td class="cell">514</td>
-                            <td class="cell">NOS</td>
-                            <td class="cell">RC ASSY LED MHND PICKUP 6P CPR LH</td>
-                            <td>
-                                <button type="button" class="btn app-btn-primary">Print</button>
-                            </td>
-                        </tr>
-
+                        @endforelse
                     </tbody>
                 </table>
+                <hr>
+                <!-- Pagination Links -->
+                <div>
+                    {{ $items->withQueryString()->links() }}
+                </div>
             </div><!--//table-responsive-->
 
         </div><!--//app-card-body-->
@@ -93,23 +92,44 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="printModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Print Settings</h1>
+                <h1 class="modal-title fs-5">Print Settings</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12">
+                    <table class="table table-bordered app-table-hover mb-0 text-left">
+                        <thead>
+                            <tr>
+                                <th class="cell">SAP Code</th>
+                                <th class="cell">ITEM CODE</th>
+                                <th class="cell">STD QTY</th>
+                                <th class="cell">PACKING</th>
+                                <th class="cell">M.R.P</th>
+                                <th class="cell">UOM</th>
+                                <th class="cell">DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal_table_tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-2">
                         <label for="print_qty" class="form-control-label">PRINT QTY : </label>
+                    </div>
+                    <div class="col-md-6">
                         <input type="number" name="print_qty" id="print_qty" class="form-control" placeholder="Enter Qty">
                     </div>
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="d-flex gap-3">
+                    <div class="d-flex gap-5">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                             <label class="form-check-label" for="flexRadioDefault1">
@@ -139,18 +159,22 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <select class="form-select form-select mb-3" aria-label="Large select example">
-                        <option selected disabled>Select Label Profile : </option>
-                        <option value="1">ITEM 75MM X 50MM - 1UP</option>
-                        <option value="1">ITEM 50MM X 38MM - 2UP</option>
-                        <option value="1">ITEM 100MM X 75MM - 1UP</option>
-                        <option value="1">ITEM 35MM X 20MM - 3UP</option>
-                        <option value="1">ITEM 75MM X 50MM - 1UP - EXPORT</option>
-                        <option value="1">ITEM 50MM X 38MM - 2UP - EXPORT</option>
-                        <option value="1">ITEM VT 38MM X 50MM - 1UP</option>
-                        <option value="1">ITEM 50MM X 50MM - 2UP</option>
-
-                    </select>
+                    <div class="col-md-2">
+                        <label for="">Label Print Profile : </label>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-select form-select mb-3" aria-label="Large select example">
+                            <option selected disabled>Select Label Profile : </option>
+                            <option value="1">ITEM 75MM X 50MM - 1UP</option>
+                            <option value="1">ITEM 50MM X 38MM - 2UP</option>
+                            <option value="1">ITEM 100MM X 75MM - 1UP</option>
+                            <option value="1">ITEM 35MM X 20MM - 3UP</option>
+                            <option value="1">ITEM 75MM X 50MM - 1UP - EXPORT</option>
+                            <option value="1">ITEM 50MM X 38MM - 2UP - EXPORT</option>
+                            <option value="1">ITEM VT 38MM X 50MM - 1UP</option>
+                            <option value="1">ITEM 50MM X 50MM - 2UP</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -160,4 +184,6 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('assets/js/portal/item_labels_index.js') }}"></script>
 @endsection
