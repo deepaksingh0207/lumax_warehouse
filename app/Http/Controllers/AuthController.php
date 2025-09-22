@@ -40,6 +40,17 @@ class AuthController extends Controller
                 'group' => $group,
             ]);
 
+            if(!empty($group->name)) {
+                switch($group->name) {
+                    case 'Admin' : 
+                        return redirect()->route('dashboard');
+                    break;
+                    case 'Vendor' :
+                        return redirect()->route('item-labels');
+                    break;
+                }
+            }
+
             return redirect()->intended('dashboard'); // redirect after login
         }
 

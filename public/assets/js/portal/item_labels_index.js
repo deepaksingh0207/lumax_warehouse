@@ -1,4 +1,22 @@
 $(document).ready(function () {
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let pageUrl = $(this).attr('href');
+        let search_val = $('#search-orders').val();
+
+        $.ajax({
+            type:"POST",
+            url: pageUrl,
+            headers:{
+                'X-CSRF-TOKEN' : csrfToken,
+            },
+            dat:{search_val : search_val},
+            success: function(data) {
+                $('#items_table').html(data);
+            }
+        });
+    });
+
     $('.item-checkbox').on('click', function () {
        $('.item-checkbox').not(this).prop('checked', false);  
     });
@@ -28,5 +46,53 @@ $(document).ready(function () {
         $('#modal_table_tbody').html(tr_html);
 
         $('#printModal').modal('show');
+    });
+
+    $('#search_btn').on('click', function () {
+        let search_val = $('#search-orders').val();
+
+        $.ajax({
+            type: "POST",
+            url: item_label_index_url,
+            data: {search_val : search_val},
+            headers:{
+                'X-CSRF-TOKEN' : csrfToken,
+            },
+            success: function (response) {
+                $('#items_table').html(response);
+            }
+        });
+    });
+
+    $('.label-type-checkbox').on('change', function () {
+        let label_type = $(this).val();
+        
+        if(label_type == 'item') {
+            $('#item_dropdown').removeClass('d-none');
+            $('#semi_inner_dropdown').addClass('d-none');
+            $('#inner_dropdown').addClass('d-none');
+            $('#outer_dropdown').addClass('d-none');
+        }
+
+        if(label_type == 'semi_inner') {
+            $('#item_dropdown').addClass('d-none');
+            $('#semi_inner_dropdown').removeClass('d-none');
+            $('#inner_dropdown').addClass('d-none');
+            $('#outer_dropdown').addClass('d-none');
+        }
+
+        if(label_type == 'inner') {
+            $('#item_dropdown').addClass('d-none');
+            $('#semi_inner_dropdown').addClass('d-none');
+            $('#inner_dropdown').removeClass('d-none');
+            $('#outer_dropdown').addClass('d-none');
+        }
+
+        if(label_type == 'outer') {
+            $('#item_dropdown').addClass('d-none');
+            $('#semi_inner_dropdown').addClass('d-none');
+            $('#inner_dropdown').addClass('d-none');
+            $('#outer_dropdown').removeClass('d-none');
+        }
     });
 });

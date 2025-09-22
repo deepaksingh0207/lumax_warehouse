@@ -9,6 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="icon" type="image/png" id="favicon" href="{{ asset('assets/images/lumax_favicon.png') }}"/>
 
     <!-- FontAwesome JS-->
@@ -65,6 +68,7 @@
 
                 <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
                     <ul class="app-menu list-unstyled accordion" id="menu-accordion">
+                        @if(session()->get('group')->name == 'Admin')
                         <li class="nav-item">
                             <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                             <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
@@ -77,6 +81,8 @@
                                 <span class="nav-link-text">Users</span>
                             </a><!--//nav-link-->
                         </li><!--//nav-item-->
+                        @endif
+                        @if(in_array(session()->get('group')->name , ['Admin','Vendor']))
                         <li class="nav-item">
                             <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                             <a class="nav-link {{ request()->routeIs('item-labels') ? 'active' : '' }}" href="{{ url('/item-labels') }}">
@@ -92,6 +98,7 @@
                                 <span class="nav-link-text">Item Labels</span>
                             </a><!--//nav-link-->
                         </li><!--//nav-item-->
+                        @endif
                     </ul><!--//app-menu-->
                 </nav><!--//app-nav-->
                 <div class="app-sidepanel-footer">
@@ -145,6 +152,10 @@
 
     <!-- Page Specific JS -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+
+    <script>
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    </script>
 
 </body>
 
