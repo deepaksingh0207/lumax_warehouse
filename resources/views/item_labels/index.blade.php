@@ -61,6 +61,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <input type="hidden" name="" id="modal_item_id">
                     <table class="table table-bordered app-table-hover mb-0 text-left">
                         <thead>
                             <tr>
@@ -91,26 +92,26 @@
                 <div class="row">
                     <div class="d-flex gap-5">
                         <div class="form-check">
-                            <input class="form-check-input label-type-checkbox" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="item" checked>
+                            <input class="form-check-input label-type-checkbox" type="radio" name="label_type" id="flexRadioDefault1" value="item" checked>
                             <label class="form-check-label label-type-checkbox" for="flexRadioDefault1">
                                 Item Label
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input label-type-checkbox" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="semi_inner">
+                            <input class="form-check-input label-type-checkbox" type="radio" name="label_type" id="flexRadioDefault2" value="semi_inner">
                             <label class="form-check-label" for="flexRadioDefault2">
                                 Semi Inner
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input label-type-checkbox" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="inner">
+                            <input class="form-check-input label-type-checkbox" type="radio" name="label_type" id="flexRadioDefault3" value="inner">
                             <label class="form-check-label" for="flexRadioDefault3">
                                 Inner Label
                             </label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input label-type-checkbox" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="outer">
+                            <input class="form-check-input label-type-checkbox" type="radio" name="label_type" id="flexRadioDefault3" value="outer">
                             <label class="form-check-label" for="flexRadioDefault3">
                                 Outer Label
                             </label>
@@ -123,56 +124,56 @@
                         <label for="">Label Print Profile : </label>
                     </div>
                     <div class="col-md-6" id = "item_dropdown">
-                        <select class="form-select form-select mb-3" aria-label="Large select example">
+                        <select class="form-select form-select mb-3" aria-label="Large select example" id="item_dropdow">
                             <option selected disabled>Select Label Profile : </option>
-                            <option value="1">ITEM 75MM X 50MM - 1UP</option>
-                            <option value="1">ITEM 50MM X 38MM - 2UP</option>
-                            <option value="1">ITEM 100MM X 75MM - 1UP</option>
-                            <option value="1">ITEM 35MM X 20MM - 3UP</option>
-                            <option value="1">ITEM 75MM X 50MM - 1UP - EXPORT</option>
-                            <option value="1">ITEM 50MM X 38MM - 2UP - EXPORT</option>
-                            <option value="1">ITEM VT 38MM X 50MM - 1UP</option>
-                            <option value="1">ITEM 50MM X 50MM - 2UP</option>
+                            <option value="75_50_1">ITEM 75MM X 50MM - 1UP</option>
+                            <option value="50_38_2">ITEM 50MM X 38MM - 2UP</option>
+                            <option value="100_75_1">ITEM 100MM X 75MM - 1UP</option>
+                            <option value="35_20_3">ITEM 35MM X 20MM - 3UP</option>
+                            <option value="75_50_1_exp">ITEM 75MM X 50MM - 1UP - EXPORT</option>
+                            <option value="50_38_2_exp">ITEM 50MM X 38MM - 2UP - EXPORT</option>
+                            <option value="38_50_1">ITEM VT 38MM X 50MM - 1UP</option>
+                            <option value="50_50_2">ITEM 50MM X 50MM - 2UP</option>
                         </select>
                     </div>
                     <div class="col-md-6 d-none" id = "semi_inner_dropdown">
                         <select class="form-select form-select mb-3" aria-label="Large select example">
                             <option selected disabled>Select Label Profile : </option>
-                            <option value="1">SEMI INNER 50MM X 38MM - 2UP</option>
-                            <option value="1">SEMI INNER 75MM X 50MM - 1UP</option>
-                            <option value="1">SEMI INNER 100MM X 75MM - 1UP</option>
-                            <option value="1">SEMI INNER 75MM X 50MM - 1UP - EXPORT</option>
-                            <option value="1">SEMI INNER 50MM X 38MM - 2UP - EXPORT</option>
+                            <option value="50_38_2">SEMI INNER 50MM X 38MM - 2UP</option>
+                            <option value="75_50_1">SEMI INNER 75MM X 50MM - 1UP</option>
+                            <option value="100_75_1">SEMI INNER 100MM X 75MM - 1UP</option>
+                            <option value="75_50_1_exp">SEMI INNER 75MM X 50MM - 1UP - EXPORT</option>
+                            <option value="50_38_2_exp">SEMI INNER 50MM X 38MM - 2UP - EXPORT</option>
                         </select>
                     </div>
                     <div class="col-md-6 d-none" id="inner_dropdown">
                         <select class="form-select form-select mb-3" aria-label="Large select example">
                             <option selected disabled>Select Label Profile : </option>
-                            <option value="1">INNER 75MM X 50MM - 1UP</option>
-                            <option value="1">INNER 50MM X 38MM - 2UP</option>
-                            <option value="1">INNER 100MM X 75MM - 1UP</option>
-                            <option value="1">INNER 75MM X 50MM - 1UP - EXPORT</option>
-                            <option value="1">INNER 50MM X 38MM - 2UP - EXPORT</option>
-                            <option value="1">INNER 83MM X 55MM - 1UP</option>
+                            <option value="75_50_1">INNER 75MM X 50MM - 1UP</option>
+                            <option value="50_38_2">INNER 50MM X 38MM - 2UP</option>
+                            <option value="100_75_1">INNER 100MM X 75MM - 1UP</option>
+                            <option value="75_50_1_exp">INNER 75MM X 50MM - 1UP - EXPORT</option>
+                            <option value="50_38_2_exp">INNER 50MM X 38MM - 2UP - EXPORT</option>
+                            <option value="83_55_1">INNER 83MM X 55MM - 1UP</option>
                         </select>
                     </div>
                     <div class="col-md-6 d-none" id="outer_dropdown">
                         <select class="form-select form-select mb-3" aria-label="Large select example">
                             <option selected disabled>Select Label Profile : </option>
-                            <option value="1">OUTER 50MM X 38MM - 2UP</option>
-                            <option value="1">OUTER 75MM X 50MM - 1UP</option>
-                            <option value="1">OUTER 100MM X 75MM - 1UP</option>
-                            <option value="1">OUTER 75MM X 50MM - 1UP - EXPORT</option>
-                            <option value="1">OUTER 50MM X 38MM - 2UP - EXPORT</option>
-                            <option value="1">OUTER 35MM X 20MM - 3UP</option>
-                            <option value="1">INNER 83MM X 55MM - 1UP</option>
+                            <option value="50_38_2">OUTER 50MM X 38MM - 2UP</option>
+                            <option value="75_50_1">OUTER 75MM X 50MM - 1UP</option>
+                            <option value="100_75_1">OUTER 100MM X 75MM - 1UP</option>
+                            <option value="75_50_1_exp">OUTER 75MM X 50MM - 1UP - EXPORT</option>
+                            <option value="50_38_2_exp">OUTER 50MM X 38MM - 2UP - EXPORT</option>
+                            <option value="35_20_3">OUTER 35MM X 20MM - 3UP</option>
+                            <option value="83_55_1">INNER 83MM X 55MM - 1UP</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn app-btn-primary">Print Label</button>
+                <button type="button" class="btn app-btn-primary" id="modal_print_btn">Print Label</button>
             </div>
         </div>
     </div>

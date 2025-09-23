@@ -43,6 +43,8 @@ $(document).ready(function () {
         let tr_html = $(".row_"+record_id).clone();
         tr_html.find('td').eq(0).remove();
 
+        $('#modal_item_id').val(record_id);
+
         $('#modal_table_tbody').html(tr_html);
 
         $('#printModal').modal('show');
@@ -93,6 +95,16 @@ $(document).ready(function () {
             $('#semi_inner_dropdown').addClass('d-none');
             $('#inner_dropdown').addClass('d-none');
             $('#outer_dropdown').removeClass('d-none');
+        }
+    });
+    
+    $('#modal_print_btn').on('click', function () {
+        let item_id = $('#modal_item_id').val();
+        let label_type = $('input[name="label_type"]:checked').val();
+
+        let label_profile = '';
+        if(label_type == 'item') {
+            label_profile = $('#item_dropdown').val();
         }
     });
 });
