@@ -5,6 +5,18 @@
         scale: 1.4;
         cursor: pointer;
     }
+
+    .item-cell {
+        cursor: pointer;
+    }
+
+    .modal-content .table th, .table td {
+        color: #C44C56;
+    }
+
+    option {
+        color: #D45F45;
+    }
 </style>
 <div class="alert alert-danger d-none" role="alert" id = "alert_msg_div">
   
@@ -60,6 +72,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="row d-none" id = "modal_error_msg_div">
+                    
+                </div>
+                <br>
                 <div class="row">
                     <input type="hidden" name="" id="modal_item_id">
                     <table class="table table-bordered app-table-hover mb-0 text-left">
@@ -84,15 +100,15 @@
                     <div class="col-md-2">
                         <label for="print_qty" class="form-control-label">PRINT QTY : </label>
                     </div>
-                    <div class="col-md-6">
-                        <input type="number" name="print_qty" id="print_qty" class="form-control" placeholder="Enter Qty">
+                    <div class="col-md-10">
+                        <input type="number" name="print_qty" id="print_qty" class="form-control" min="1" value="1" placeholder="Enter Qty">
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="d-flex gap-5">
                         <div class="form-check">
-                            <input class="form-check-input label-type-checkbox" type="radio" name="label_type" id="flexRadioDefault1" value="item" checked>
+                            <input class="form-check-input label-type-checkbox" type="radio" name="label_type" id="flexRadioDefault1" value="item">
                             <label class="form-check-label label-type-checkbox" for="flexRadioDefault1">
                                 Item Label
                             </label>
@@ -123,8 +139,8 @@
                     <div class="col-md-2">
                         <label for="">Label Print Profile : </label>
                     </div>
-                    <div class="col-md-6" id = "item_dropdown">
-                        <select class="form-select form-select mb-3" aria-label="Large select example" id="item_dropdow">
+                    <div class="col-md-6" id = "item_dropdown_div">
+                        <select class="form-select form-select mb-3" id="item_dropdown">
                             <option selected disabled>Select Label Profile : </option>
                             <option value="75_50_1">ITEM 75MM X 50MM - 1UP</option>
                             <option value="50_38_2">ITEM 50MM X 38MM - 2UP</option>
@@ -136,8 +152,8 @@
                             <option value="50_50_2">ITEM 50MM X 50MM - 2UP</option>
                         </select>
                     </div>
-                    <div class="col-md-6 d-none" id = "semi_inner_dropdown">
-                        <select class="form-select form-select mb-3" aria-label="Large select example">
+                    <div class="col-md-6 d-none" id = "semi_inner_dropdown_div">
+                        <select class="form-select form-select mb-3" id="semi_inner_dropdown">
                             <option selected disabled>Select Label Profile : </option>
                             <option value="50_38_2">SEMI INNER 50MM X 38MM - 2UP</option>
                             <option value="75_50_1">SEMI INNER 75MM X 50MM - 1UP</option>
@@ -146,8 +162,8 @@
                             <option value="50_38_2_exp">SEMI INNER 50MM X 38MM - 2UP - EXPORT</option>
                         </select>
                     </div>
-                    <div class="col-md-6 d-none" id="inner_dropdown">
-                        <select class="form-select form-select mb-3" aria-label="Large select example">
+                    <div class="col-md-6 d-none" id="inner_dropdown_div">
+                        <select class="form-select form-select mb-3" id="inner_dropdown">
                             <option selected disabled>Select Label Profile : </option>
                             <option value="75_50_1">INNER 75MM X 50MM - 1UP</option>
                             <option value="50_38_2">INNER 50MM X 38MM - 2UP</option>
@@ -157,8 +173,8 @@
                             <option value="83_55_1">INNER 83MM X 55MM - 1UP</option>
                         </select>
                     </div>
-                    <div class="col-md-6 d-none" id="outer_dropdown">
-                        <select class="form-select form-select mb-3" aria-label="Large select example">
+                    <div class="col-md-6 d-none" id="outer_dropdown_div">
+                        <select class="form-select form-select mb-3" id="outer_dropdown">
                             <option selected disabled>Select Label Profile : </option>
                             <option value="50_38_2">OUTER 50MM X 38MM - 2UP</option>
                             <option value="75_50_1">OUTER 75MM X 50MM - 1UP</option>
@@ -181,6 +197,7 @@
 
 <script>
     let item_label_index_url = "{{ route('item-labels') }}";
+    let create_pdf_url = "{{ route('items_labels.create_pdf') }}";
 </script>
 
 <script src="{{ asset('assets/js/portal/item_labels_index.js') }}"></script>

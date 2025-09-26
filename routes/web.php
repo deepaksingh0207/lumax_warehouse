@@ -27,5 +27,6 @@ Route::middleware(['web','auth'])->group(function () {
     Route::get('/item-labels', [ItemLabelsController::class, 'index'])->name('item-labels');
     Route::post('/item-labels', [ItemLabelsController::class, 'index'])->name('item-labels');
     Route::get('/item-labels/generate' , [ItemLabelsController::class, 'generate'])->name('items_labels.generate');
-    Route::get('/item-labels/create-pdf' , [ItemLabelsController::class, 'createPdf'])->name('items_labels.create_pdf');
+    // Route::get('/item-labels/create-pdf' , [ItemLabelsController::class, 'createPdf'])->name('items_labels.create_pdf');
+    Route::post('/item-labels/create-pdf' , [ItemLabelsController::class, 'createPdf'])->name('items_labels.create_pdf');
 });

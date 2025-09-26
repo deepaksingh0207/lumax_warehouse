@@ -11,6 +11,19 @@ $(document).ready(function () {
         });
     });
 
+    $('input[type="checkbox"][role="switch"]').on('change', function () {
+        let user_id = $(this).val();
+        let label_text = $('#switch_label_'+user_id).text();
+        
+        if(label_text == "Active") {
+            $('#switch_label_'+user_id).text("InActive");
+        }
+        
+        if(label_text == "InActive") {
+            $('#switch_label_'+user_id).text("Active");
+        }
+    });
+
     $('#download-template').on('click', function () {
         let data = [
             ['SAP CODE' , 'Name' , 'Email' , 'Mobile']

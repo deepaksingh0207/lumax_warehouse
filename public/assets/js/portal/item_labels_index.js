@@ -21,8 +21,24 @@ $(document).ready(function () {
        $('.item-checkbox').not(this).prop('checked', false);  
     });
 
+    $(".item-cell").on("click", function () {
+        let item_id = $(this).closest('tr').data("item-id");
+
+        let checked = $('input[type="checkbox"][name="item_checkbox"][value="'+item_id+'"]').prop("checked");
+        if(checked) {
+            $('input[type="checkbox"][name="item_checkbox"]').prop("checked" ,false);
+            $('input[type="checkbox"][name="item_checkbox"][value="'+item_id+'"]').prop("checked" ,false);
+        }
+        else {
+            $('input[type="checkbox"][name="item_checkbox"]').prop("checked" ,false);
+            $('input[type="checkbox"][name="item_checkbox"][value="'+item_id+'"]').prop("checked" ,true);
+        }
+    });
+
     $('#print_btn').click(function (e) { 
         e.preventDefault();
+        $('#modal_table_tbody').html("");
+        $('#err_list').html("");
         $("#alert_msg_div").addClass("d-none");
         $('#alert_msg_div').html("");
         
@@ -70,35 +86,39 @@ $(document).ready(function () {
         let label_type = $(this).val();
         
         if(label_type == 'item') {
-            $('#item_dropdown').removeClass('d-none');
-            $('#semi_inner_dropdown').addClass('d-none');
-            $('#inner_dropdown').addClass('d-none');
-            $('#outer_dropdown').addClass('d-none');
+            $('#item_dropdown_div').removeClass('d-none');
+            $('#semi_inner_dropdown_div').addClass('d-none');
+            $('#inner_dropdown_div').addClass('d-none');
+            $('#outer_dropdown_div').addClass('d-none');
         }
 
         if(label_type == 'semi_inner') {
-            $('#item_dropdown').addClass('d-none');
-            $('#semi_inner_dropdown').removeClass('d-none');
-            $('#inner_dropdown').addClass('d-none');
-            $('#outer_dropdown').addClass('d-none');
+            $('#item_dropdown_div').addClass('d-none');
+            $('#semi_inner_dropdown_div').removeClass('d-none');
+            $('#inner_dropdown_div').addClass('d-none');
+            $('#outer_dropdown_div').addClass('d-none');
         }
 
         if(label_type == 'inner') {
-            $('#item_dropdown').addClass('d-none');
-            $('#semi_inner_dropdown').addClass('d-none');
-            $('#inner_dropdown').removeClass('d-none');
-            $('#outer_dropdown').addClass('d-none');
+            $('#item_dropdown_div').addClass('d-none');
+            $('#semi_inner_dropdown_div').addClass('d-none');
+            $('#inner_dropdown_div').removeClass('d-none');
+            $('#outer_dropdown_div').addClass('d-none');
         }
 
         if(label_type == 'outer') {
-            $('#item_dropdown').addClass('d-none');
-            $('#semi_inner_dropdown').addClass('d-none');
-            $('#inner_dropdown').addClass('d-none');
-            $('#outer_dropdown').removeClass('d-none');
+            $('#item_dropdown_div').addClass('d-none');
+            $('#semi_inner_dropdown_div').addClass('d-none');
+            $('#inner_dropdown_div').addClass('d-none');
+            $('#outer_dropdown_div').removeClass('d-none');
         }
     });
     
     $('#modal_print_btn').on('click', function () {
+        console.log('CLICKED');
+        let error = 0;
+        let message = [];
+        let print_qty = $('#print_qty').val();
         let item_id = $('#modal_item_id').val();
         let label_type = $('input[name="label_type"]:checked').val();
 
@@ -106,5 +126,78 @@ $(document).ready(function () {
         if(label_type == 'item') {
             label_profile = $('#item_dropdown').val();
         }
+
+        if(label_type == 'semi_inner') {
+            label_profile = $('#semi_inner_dropdown').val();
+        }
+
+        if(label_type == 'inner') {
+            label_profile = $('#inner_dropdown').val();
+        }
+
+        if(label_type == 'outer') {
+            label_profile = $('#outer_dropdown').val();
+        }
+
+        if(item_id == '' || item_id == undefined || item_id == null) {
+            error = 1;
+            message.push("Item Data Not Found");
+        }
+
+        if(label_type == '' || label_type == undefined || label_type == null) {
+            error = 1;
+            message.push("Please select Label Type");
+        }
+
+        if(label_profile == '') {
+            error = 1;
+            message.push("Please Select Label Profile for Print");
+        }
+
+        console.log({item_id,print_qty,label_type,label_profile,message});
+        console.log('Message Length' , message.length);
+        
+        if(message.length > 0) {
+            let err_msg_html = '';
+            for(let i = 0 ; i < message.length ; i++) {
+                err_msg_html += '<li class="list-group-item list-group-item-danger mt-2">'+ message[i] +'</li>';
+            }
+
+            let html = `<div class="alert alert-danger alert-dismissible" role="alert">
+                <ol class="list-group list-group-numbered">
+                    ${err_msg_html}
+                </ol>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+
+            $('#modal_error_msg_div').html(html);
+            $('#modal_error_msg_div').removeClass('d-none');
+        }
+        else {
+            $('#modal_error_msg_div').addClass('d-none');
+            $.ajax({
+                type: "POST",
+                url: create_pdf_url,
+                data: {item_id : item_id , print_qty : print_qty , label_type : label_type , label_profile : label_profile},
+                dataType: "json",
+                headers:{
+                    'X-CSRF-TOKEN' : csrfToken,
+                },
+                success: function (response) {
+                    if(response.status) {
+                        const a = document.createElement('a');
+                        a.href = response.label_url;
+                        a.download = response.file_name; 
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                    else {
+                        
+                    }
+                }
+            });
+        }
+
     });
 });

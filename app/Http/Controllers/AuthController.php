@@ -19,15 +19,45 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        // $credentials = $request->validate([
+        //     'email' => ['required', 'email'],
+        //     'password' => ['required'],
+        // ]);
+        $sap_code = $request->input('sap_code',null);
+        $email = $request->input('email',null);
+        $password = $request->input('password',null);
+
+        if(!empty($sap_code) && empty($email)) {
+            $user = User :: where('sap_code', $sap_code)->first();
+            if($user) {
+                $credentials = [
+                    'email' => $user->email,
+                    'password' => $password,
+                ];
+            }
+        }
+
+        if(!empty($sap_code) && !empty($email)) {
+            $user = User :: where(['sap_code'=> $sap_code,'email' => $email])->first();
+            if($user) {
+                $credentials = [
+                    'email' => $user->email,
+                    'password' => $password,
+                ];
+            }
+        }
+
+        if(!empty($email) && !empty($password)) {
+            $credentials = [
+                'email' => $email,
+                'password' => $password,
+            ];
+        }
 
         // Check if "remember me" was ticked
         $remember = $request->has('remember');
 
-        if (Auth::attempt($credentials , $remember)) {
+        if (!empty($credentials) && Auth::attempt($credentials , $remember)) {
             $request->session()->regenerate();
 
             // Get the logged-in user

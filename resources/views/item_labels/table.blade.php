@@ -13,19 +13,19 @@
     </thead>
     <tbody>
         @forelse ($items as $item)
-        <tr class="row_{{ $item->id }}">
+        <tr class="row_{{ $item->id }}" data-item-id = "{{ $item->id }}">
             <td>
                 <div class="form-check">
                     <input class="form-check-input item-checkbox" name="item_checkbox" type="checkbox" value="{{ $item->id }}">
                 </div>
             </td>
-            <td class="cell">{{ $item->sap_code }}</td>
-            <td class="cell"><span class="truncate">{{ $item->item_code }}</span></td>
-            <td class="cell">{{ $item->std_qty }}</td>
-            <td class="cell">{{ $item->packing }}</td>
-            <td class="cell">{{ $item->mrp  }}</td>
-            <td class="cell">{{ $item->uom }}</td>
-            <td class="cell">{{ $item->description }}</td>
+            <td class="cell item-cell">{{ $item->sap_code }}</td>
+            <td class="cell item-cell"><span class="truncate">{{ $item->item_code }}</span></td>
+            <td class="cell item-cell">{{ $item->std_qty }}</td>
+            <td class="cell item-cell">{{ $item->packing }}</td>
+            <td class="cell item-cell">{{ $item->mrp  }}</td>
+            <td class="cell item-cell">{{ $item->uom }}</td>
+            <td class="cell item-cell">{{ $item->description }}</td>
         </tr>
         @empty
         <tr>

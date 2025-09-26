@@ -32,56 +32,92 @@ class ItemLabelsController extends Controller
         return view('item_labels/index', compact('items'));
     }
 
-    public function createPdf()
+    public function createPdf(Request $request)
     {
-        $item_data = Item::where('id', 1)->first();
-        $folderPath = public_path('assets/images/qr_code');
-        if (!file_exists($folderPath)) {
-            mkdir($folderPath, 0755, true);
+        $item_id = $request->input('item_id',null);
+        $print_qty = $request->input('print_qty',null);
+        $label_type = $request->input('label_type',null);
+        $label_profile = $request->input('label_profile',null);
+
+        // dump([$item_id,$print_qty,$label_type,$label_profile]);
+
+        if(!empty($item_id) && !empty($print_qty) && !empty($label_type) && !empty($label_profile)) {
+            $label_settings = explode('_',$label_profile);
+
+            $item_data = Item::where('id', $item_id)->first();
+            
+            $folderPath = public_path('assets/images/qr_code');
+            
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0755, true);
+            }
+    
+            $file_name = '/qr_code_'.$item_data->item_code.'_'.$item_data->vendor_sap_code.'.png';
+    
+            $filePath = $folderPath . '/'.$file_name;
+    
+            $qr = $filePath;
+
+            $rupee_icon = public_path('assets/images/rupee.png');
+
+            $qrCodeText = "Part No. ".$item_data->item_code.", MRP. Rs ".$item_data->mrp."/- ".$item_data->std_qty." Date - ".date('M Y');
+    
+            Builder::create()
+            ->writer(new PngWriter())  // PNG output, no Imagick needed
+            ->data($qrCodeText)
+            ->size(200)
+            ->margin(5)
+            ->build()
+            ->saveToFile($filePath);
+    
+            $data = [
+                'qr' => $qr,
+                'item_data' => $item_data,
+                'label_settings' => $label_settings,
+                'rupee_icon' => $rupee_icon,
+            ];
+    
+            $numberOfPages = $print_qty; 
+    
+            $htmlContent = '';
+            for ($i = 0; $i < $numberOfPages; $i++) {
+                // Render the Blade view for a single page
+                $htmlContent .= view('item_labels.pdf', $data)->render();
+            }
+
+            // dump($htmlContent);
+            
+            // Load the combined HTML content into the PDF
+            // $pdf = Pdf::loadHtml($htmlContent);
+    
+            // // $pdf = Pdf::loadView('item_labels.pdf', $data);
+            // // $paperSizeSetting = [0,0,100,75]; //Width , Height in mm
+            // // $pdf->setPaper($paperSizeSetting);
+    
+            // $pdf->setPaper('letter', 'portrait');
+            // // $pdf->set_option('dpi', 200);
+            // $pdf->set_option('margin-top', 0);
+            // $pdf->set_option('margin-bottom', 0);
+            // $pdf->set_option('margin-left', 0);
+            // $pdf->set_option('margin-right', 0);
+
+            // // Build file path (example: storage/app/public/labels/label_123456789.pdf)
+            // $fileName = "label_".$label_profile."_" . strtotime('now') . ".pdf";
+            // $path = public_path("labels/" . $fileName);
+
+            // // Save PDF to the path
+            // $resp = $pdf->save($path);
+
+            // // dump($resp);
+            
+            // return response()->json([
+            //     'status' => 1,
+            //     'label_url' => asset('labels/'.$fileName),
+            //     'file_name' => $fileName,
+            // ]);
+            return view('item_labels/pdf', compact('qr','item_data','label_settings','rupee_icon'));
         }
 
-        $file_name = '/qr_code_'.$item_data->item_code.'_'.$item_data->vendor_sap_code.'.png';
-
-        $filePath = $folderPath . '/'.$file_name;
-
-        $qr = $filePath;
-
-        Builder::create()
-        ->writer(new PngWriter())  // PNG output, no Imagick needed
-        ->data('https://example.com')
-        ->size(200)
-        ->margin(5)
-        ->build()
-        ->saveToFile($filePath);
-
-        $data = [
-            'qr' => $qr,
-            'item_data' => $item_data,
-        ];
-
-        $numberOfPages = 3; 
-
-        $htmlContent = '';
-        for ($i = 0; $i < $numberOfPages; $i++) {
-            // Render the Blade view for a single page
-            $htmlContent .= view('item_labels.pdf', $data)->render();
-        }
-        
-        // Load the combined HTML content into the PDF
-        $pdf = Pdf::loadHtml($htmlContent);
-
-        // $pdf = Pdf::loadView('item_labels.pdf', $data);
-        // $paperSizeSetting = [0,0,100,75]; //Width , Height in mm
-        // $pdf->setPaper($paperSizeSetting);
-
-        $pdf->setPaper('letter', 'portrait');
-        // $pdf->set_option('dpi', 200);
-        $pdf->set_option('margin-top', 0);
-        $pdf->set_option('margin-bottom', 0);
-        $pdf->set_option('margin-left', 0);
-        $pdf->set_option('margin-right', 0);
-        return $pdf->download("label_" . strtotime('now') . ".pdf");
-        // return view('item_labels/pdf', compact('qr','item_data'));
     }
 
     public function generate()

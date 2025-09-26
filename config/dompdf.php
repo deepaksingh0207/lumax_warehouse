@@ -297,5 +297,14 @@ return [
          */
         'enable_html5_parser' => true,
     ],
+    'fonts' => [
+        'arial' => [
+            'normal' => 'arial/arial.ttf',
+            'bold' => 'arial/arialbd.ttf',
+            'italic' => 'arial/ariali.ttf',
+            'bold_italic' => 'arial/arialbi.ttf',
+        ],
+        // other fonts...
+    ],
 
 ];

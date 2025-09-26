@@ -43,8 +43,13 @@
                         <form class="auth-form login-form" method="POST" action="{{ url('/login') }}">
                             @csrf
                             <div class="email mb-3">
+                                <label class="sr-only" for="sap_code">SAP User Code</label>
+                                <input id="sap_code" name="sap_code" type="text" class="form-control signin-email" placeholder="SAP Code" autocomplete="off">
+                            </div><!--//form-group-->
+                            <p style="text-align: center;color:#e01a2c;">OR</p>
+                            <div class="email mb-3">
                                 <label class="sr-only" for="signin-email">Email</label>
-                                <input id="signin-email" name="email" type="email" class="form-control signin-email" placeholder="Email address" required="required" autocomplete="off">
+                                <input id="signin-email" name="email" type="email" class="form-control signin-email" placeholder="Email address" autocomplete="off">
                             </div><!--//form-group-->
                             <div class="password mb-3">
                                 <label class="sr-only" for="signin-password">Password</label>
