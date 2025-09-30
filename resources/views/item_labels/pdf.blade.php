@@ -55,11 +55,11 @@
             <br>
             <br>
             <span>
-                <span style="font-size : 22px"><strong><span style="margin-right:25px">MRP : ₹{{ $item_data->mrp }}</span> (₹ {{ $item_data->mrp }} each) Inc. of all Taxes</strong></span>
+                <span style="font-size : 22px"><strong><span style="margin-right:25px">MRP : ₹{{ $item_data->mrp * $qty }}</span> (₹ {{ $item_data->mrp }} each) Inc. of all Taxes</strong></span>
             </span>
             <br>
             <span>
-                <span style="font-size : 21px"><strong>Net Quantity : {{ $item_data->std_qty }}</strong></span>
+                <span style="font-size : 21px"><strong>Net Quantity : {{ $qty }}</strong></span>
                 <span style="font-size : 21px;margin-left:5%"><strong>MFD : {{ date("M Y") }}</strong></span>
             </span>
         </div>

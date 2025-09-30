@@ -30,7 +30,7 @@
 
         .export-box {
             border: 1px solid #000;
-            padding: 3px 10px;
+            padding: 3px 25px;
             font-size: 14px;
             font-weight: bold;
             letter-spacing: 1px;
@@ -115,27 +115,27 @@
     <div class="main-content">
         <div class="qr-info">
             <div class="qr-code-placeholder">
-                <img src="C:\wamp64\www\lumax_warehouse\public\assets\images\qr_code\qr_code_002-TLA-SG-WH-24-L_000122003.png" style="width: 80px;">
+                <img src="{{ $qr }}" style="width: 80px;">
             </div>
             <div class="barcode-number">
-                (61028439)
+                ({{ ltrim($item_data->sap_code , '0') }})
             </div>
         </div>
         
         <div class="product-details">
-            <h1>002-TLA-SG-WH-24-L</h1>
+            <h1>{{ $item_data->item_code }}</h1>
             <p class="product-description">
-                T/L ASSY SIGNA LED WT WIRE 24V LH
+                {{ $item_data->description }}
             </p>
         </div>
     </div>
     
     <div class="bottom-row">
         <div class="quantity-date">
-            <span class="quantity">Net Quantity : 1 N</span>
+            <span class="quantity">Net Quantity : {{ $qty }} N</span>
         </div>
         <div class="date-of-manufacture">
-            Month & Year of Manufacture : Aug 2025
+            Month & Year of Manufacture : {{ date("M Y") }} 
         </div>
     </div>
 

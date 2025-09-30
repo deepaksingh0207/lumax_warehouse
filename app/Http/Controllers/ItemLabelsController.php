@@ -183,21 +183,89 @@ class ItemLabelsController extends Controller
             
             unlink($filePath);
 
+            $packing = explode('X',$item_data->packing);
+            if($label_type == "item") {
+                $qty = $packing[0];
+            }
+            elseif($label_type == "inner") {
+                $qty = $packing[1];
+            }
+            elseif($label_type == "outer") {
+                $qty =  $item_data->std_qty;
+            }
+
             $data = [
                 'qr' => $qr,
                 'item_data' => $item_data,
                 'label_settings' => $label_settings,
                 'rupee_icon' => $rupee_icon,
+                'label_type' => $label_type,
+                'qty' => $qty,
             ];
 
-            $image = SnappyImage::loadView('item_labels.pdf', $data)
-            ->setOption('width', 100)
-            ->setOption('quality', 100);    
-            
-            $filename = 'generated-image-' . time() . '.jpg';
-            $path = public_path('images/' . $filename);
-            $image->save($path);
-            unlink($path);
+            if($label_type == 'item') {
+                if(empty($label_settings[3])) {
+                    $image = SnappyImage::loadView('item_labels.pdf', $data)
+                    ->setOption('width', 100)
+                    ->setOption('quality', 100);    
+                    
+                    $filename = 'generated-image-' . time() . '.jpg';
+                    $path = public_path('images/' . $filename);
+                    $image->save($path);
+                }
+                else {
+                    $image = SnappyImage::loadView('item_labels.pdf_exp', $data)
+                    ->setOption('width', 100)
+                    ->setOption('quality', 100);    
+                    
+                    $filename = 'generated-image-' . time() . '.jpg';
+                    $path = public_path('images/' . $filename);
+                    $image->save($path);
+                }
+            }
+            else if($label_type == "inner") {
+                if(empty($label_settings[3])) {
+                    $image = SnappyImage::loadView('item_labels.inner_pdf', $data)
+                    ->setOption('width', 100)
+                    ->setOption('quality', 100);    
+                    
+                    $filename = 'generated-image-' . time() . '.jpg';
+                    $path = public_path('images/' . $filename);
+                    $image->save($path);
+                }
+                else {
+                    $image = SnappyImage::loadView('item_labels.pdf_exp', $data)
+                    ->setOption('width', 100)
+                    ->setOption('quality', 100);    
+                    
+                    $filename = 'generated-image-' . time() . '.jpg';
+                    $path = public_path('images/' . $filename);
+                    $image->save($path);
+                }
+            }
+            else if($label_type == "outer") {
+                if(empty($label_settings[3])) {
+                    $image = SnappyImage::loadView('item_labels.inner_pdf', $data)
+                    ->setOption('width', 100)
+                    ->setOption('quality', 100);    
+                    
+                    $filename = 'generated-image-' . time() . '.jpg';
+                    $path = public_path('images/' . $filename);
+                    $image->save($path);
+                }
+                else {
+                    $image = SnappyImage::loadView('item_labels.pdf_exp', $data)
+                    ->setOption('width', 100)
+                    ->setOption('quality', 100);    
+                    
+                    $filename = 'generated-image-' . time() . '.jpg';
+                    $path = public_path('images/' . $filename);
+                    $image->save($path);
+                }
+            }
+
+
+            $data['image_path'] = $path;
 
             $numberOfPages = $print_qty; 
     
@@ -208,10 +276,12 @@ class ItemLabelsController extends Controller
 
             $pdf = Pdf::loadHtml($htmlContent);
             $pdf->setPaper('letter', 'portrait');
-            $fileName = "label_".$label_profile."_" . strtotime('now') . ".pdf";
+            $fileName = $label_type."_label_".$label_profile."_" . strtotime('now') . ".pdf";
             
             $pdfContent = $pdf->output();
             $encodedPdf = base64_encode($pdfContent);
+
+            unlink($path);
     
             return response()->json([
                 'message' => 'Image generated and saved successfully!',

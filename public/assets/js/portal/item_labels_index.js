@@ -23,8 +23,10 @@ $(document).ready(function () {
 
     $(".item-cell").on("click", function () {
         let item_id = $(this).closest('tr').data("item-id");
+        console.log({item_id});
 
         let checked = $('input[type="checkbox"][name="item_checkbox"][value="'+item_id+'"]').prop("checked");
+        console.log({checked});
         if(checked) {
             $('input[type="checkbox"][name="item_checkbox"]').prop("checked" ,false);
             $('input[type="checkbox"][name="item_checkbox"][value="'+item_id+'"]').prop("checked" ,false);
