@@ -42,7 +42,7 @@
         <div class="item-label">
             <div class="qr-row" style="width: 100%; text-align: right; margin-bottom: -5px;">
                 <span class="qr-code" style="display: inline-block; text-align: right;">
-                    <img src="{{ $qr }}" style="width: 20px; height: auto; display: block; margin-left: auto;">
+                    <img src="{{ $qr }}" style="width: 40px; height: auto; display: block; margin-left: auto;">
                     <br>
                     <span style="font-size: 15px; display: block; text-align: right; width: 100%; margin-top: 5px;"><strong>{{ ltrim($item_data->sap_code , '0') }}</strong></span>
                 </span>
@@ -55,7 +55,7 @@
             <br>
             <br>
             <span>
-                <span style="font-size : 22px"><strong><span style="margin-right:25px">MRP : <img src="{{ $rupee_icon }}" alt="" style="width:15px" >{{ $item_data->mrp }}</span> (<img src="{{ $rupee_icon }}" alt="" style="width:15px"> {{ $item_data->mrp }} each) Inc. of all Taxes</strong></span>
+                <span style="font-size : 22px"><strong><span style="margin-right:25px">MRP : ₹{{ $item_data->mrp }}</span> (₹ {{ $item_data->mrp }} each) Inc. of all Taxes</strong></span>
             </span>
             <br>
             <span>

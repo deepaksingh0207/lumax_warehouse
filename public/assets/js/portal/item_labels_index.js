@@ -185,12 +185,24 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     if(response.status) {
-                        const a = document.createElement('a');
-                        a.href = response.label_url;
-                        a.download = response.file_name; 
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
+                        const base64Pdf = response.encoded_pdf_data;
+                        const filename = response.pdf_file_name;
+                        const binaryString = atob(base64Pdf);
+
+                        const len = binaryString.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+
+                        const blob = new Blob([bytes], { type: 'application/pdf' });
+                        const link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+
+                        link.download = filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
                     }
                     else {
                         

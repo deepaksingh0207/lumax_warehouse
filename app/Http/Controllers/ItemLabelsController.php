@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
+use Barryvdh\Snappy\Facades\SnappyImage;
 
 class ItemLabelsController extends Controller
 {
@@ -32,7 +33,7 @@ class ItemLabelsController extends Controller
         return view('item_labels/index', compact('items'));
     }
 
-    public function createPdf(Request $request)
+    public function createPdfOld(Request $request)
     {
         $item_id = $request->input('item_id',null);
         $print_qty = $request->input('print_qty',null);
@@ -138,5 +139,88 @@ class ItemLabelsController extends Controller
             ->saveToFile($filePath);
 
         return 'QR code saved successfully!';
+    }
+
+    public function createPdf(Request $request) {
+        $item_id = $request->input('item_id',null);
+        $print_qty = $request->input('print_qty',null);
+        $label_type = $request->input('label_type',null);
+        $label_profile = $request->input('label_profile',null);
+
+        // dump([$item_id,$print_qty,$label_type,$label_profile]);
+
+        if(!empty($item_id) && !empty($print_qty) && !empty($label_type) && !empty($label_profile)) {
+
+            $label_settings = explode('_',$label_profile);
+
+            $item_data = Item::where('id', $item_id)->first();
+            
+            $folderPath = public_path('assets/images/qr_code');
+            
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0755, true);
+            }
+    
+            $file_name = '/qr_code_'.$item_data->item_code.'_'.$item_data->vendor_sap_code.'.png';
+    
+            $filePath = $folderPath . '/'.$file_name;
+
+            $rupee_icon = asset('assets/images/rupee.png');
+
+            $qrCodeText = "Part No. ".$item_data->item_code.", MRP. Rs ".$item_data->mrp."/- ".$item_data->std_qty." Date - ".date('M Y');
+    
+            Builder::create()
+            ->writer(new PngWriter())  
+            ->data($qrCodeText)
+            ->size(200)
+            ->margin(5)
+            ->build()
+            ->saveToFile($filePath);
+
+            $qrBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($filePath));
+
+            $qr = $qrBase64;
+            
+            unlink($filePath);
+
+            $data = [
+                'qr' => $qr,
+                'item_data' => $item_data,
+                'label_settings' => $label_settings,
+                'rupee_icon' => $rupee_icon,
+            ];
+
+            $image = SnappyImage::loadView('item_labels.pdf', $data)
+            ->setOption('width', 100)
+            ->setOption('quality', 100);    
+            
+            $filename = 'generated-image-' . time() . '.jpg';
+            $path = public_path('images/' . $filename);
+            $image->save($path);
+            unlink($path);
+
+            $numberOfPages = $print_qty; 
+    
+            $htmlContent = '';
+            for ($i = 0; $i < $numberOfPages; $i++) {
+                $htmlContent .= view('item_labels.label', $data)->render();
+            }
+
+            $pdf = Pdf::loadHtml($htmlContent);
+            $pdf->setPaper('letter', 'portrait');
+            $fileName = "label_".$label_profile."_" . strtotime('now') . ".pdf";
+            
+            $pdfContent = $pdf->output();
+            $encodedPdf = base64_encode($pdfContent);
+    
+            return response()->json([
+                'message' => 'Image generated and saved successfully!',
+                'encoded_pdf_data' => $encodedPdf,
+                'status' => 1,
+                'pdf_file_name' => $fileName,
+            ]);
+
+            // return view('item_labels.label', $data);
+        }
     }
 }
