@@ -21,7 +21,7 @@ $(document).ready(function () {
        $('.item-checkbox').not(this).prop('checked', false);  
     });
 
-    $(".item-cell").on("click", function () {
+    $(document).on("click", ".item-cell", function () {
         let item_id = $(this).closest('tr').data("item-id");
         console.log({item_id});
 
